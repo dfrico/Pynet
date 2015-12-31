@@ -1,6 +1,7 @@
 import networkx as nx
 from twython import Twython as tw
 from datetime import datetime
+from time import sleep
 
 print datetime.now()
 
@@ -16,13 +17,15 @@ OAUTH_TOKEN_SECRET = ''
 twitter = tw(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 already = {''}
-i=0
-followers1 = twitter.get_followers_ids(user_id='pynet_')
+sleep(60)
+followers1 = twitter.get_followers_ids(user_id='blayhem')
 for user in followers1["ids"]:
     username = twitter.show_user(user_id=user)["screen_name"]
     G.add_node(username)
-    G.add_edge('@pynet_', username)
-    # time.sleep(60)
+    G.add_edge('@blayhem', username)
+    # for i in tqdm(range(60)):
+    sleep(60)
+
     already.add(user)
 
     print username
