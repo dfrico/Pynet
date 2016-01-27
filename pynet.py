@@ -26,8 +26,11 @@ has FOLLOWERS2, where each USER2 has a USERNAME2.
 """
 try:
     already = {''}
-    followers1 = twitter.get_followers_ids(user_id=main_user)
-    print("\nUp and running! Please grab a coffee, this is going to take 1min per follower.\n")
+    musn = twitter.show_user(screen_name=main_user)["id"]  # Main User Screen Name to get ID
+    followers1 = twitter.get_followers_ids(user_id=musn)
+    time = twitter.show_user(screen_name=main_user)["followers_count"]  # Estimated time in min (= number of followers)
+
+    print("\nUp and running! Please grab a coffee, this is going to take "+str(time)+" minutes.\n")
     sleep(60)
 
     if not os.path.exists('graph.json'):
@@ -35,7 +38,6 @@ try:
 
     for user in followers1["ids"]:
         username = twitter.show_user(user_id=user)["screen_name"]
-        # G.add_node(username)
         G.add_edge(main_user, username)
         # for i in tqdm(range(60)): TO-DO: INSERT PROGRESS BAR INSTEAD OF PRINTING THE USER NAMES.
         sleep(60)
@@ -59,10 +61,12 @@ try:
         with open('graph.json', 'w') as f:
             f.write(json.dumps(json_graph.node_link_data(G)))   # json export to sigma JS
 
-    print("\n END OF FILE \n")
+    print("\n END OF FILE. Check .gexf file.\n")
 except twython.exceptions.TwythonAuthError:
     print "\nError in the tokens."
 except twython.exceptions.TwythonRateLimitError:
     print "\nRate limit exceeded: too much requests. Please wait 15 min and try again."
 except twython.exceptions.TWITTER_HTTP_STATUS_CODE:
     print "\nError connecting. Check your internet connection."
+except twython.exceptions.TwythonError:
+    print("\nGeneric error.")
