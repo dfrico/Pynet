@@ -15,7 +15,7 @@ class Pynet(object):
             main_user = raw_input("Enter your twitter @ username: ")
             # main_user = 'pynet_'
             rate = 0
-            i = 1
+            i = 0
 
             twitter = twython.Twython(APP_KEY[i], APP_SECRET[i], OAUTH_TOKEN[i], OAUTH_TOKEN_SECRET[i])
             already = {''}
@@ -69,7 +69,7 @@ class Pynet(object):
                 rate += 1
 
                 if rate == 14:
-                    if i < len(APP_KEY):
+                    if i < len(APP_KEY)-1:
                         i += 1
                     else:
                         i = 0
